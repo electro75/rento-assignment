@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {fetchAllUsers} from '../../actions';
+import {storeSingleUser} from '../../actions';
 
 class Users extends React.Component {
 
@@ -14,7 +15,11 @@ class Users extends React.Component {
             return (<tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.company.name}</td>
-                <td><button className="ui primary medium button" onClick={()=>{this.props.history.push(`/user/${user.id}`)}} >View Posts</button></td>
+                <td><button className="ui primary medium button" onClick={()=>{
+                    this.props.storeSingleUser({name : user.name, id: user.id})
+                    this.props.history.push(`/user/${user.id}`)
+
+                }} >View Posts</button></td>
                 </tr>)
         })        
     }
@@ -57,4 +62,4 @@ const mapStateToProps = (state) => {
     return { users : state.users }
 }
 
-export default connect(mapStateToProps, {fetchAllUsers})(Users);
+export default connect(mapStateToProps, {fetchAllUsers, storeSingleUser})(Users);
