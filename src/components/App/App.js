@@ -4,7 +4,7 @@ import UserPosts from '../UserPosts/UserPosts';
 
 function App() {
   return (
-    <div className="ui" >
+    <div>
       <BrowserRouter>
         <Route path="/" exact component={Users} />
         <Route path="/user/:userId" component={UserPosts} />

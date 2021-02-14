@@ -1,41 +1,91 @@
 import React from 'react';
 import {connect} from 'react-redux';
-
+import './UserPosts.css';
 import {fetchSingleUserPosts, fetchSingleUser} from '../../actions';
 
 class UserPosts extends React.Component {
 
-    getParams() {
-        const {match : {params }} = this.props;
+    getUser() {
+        const {match : {params}} = this.props;
 
-        return params;
+        return this.props.singleUser[params.userId]
     }
 
-    componentDidMount() {
-        let params = this.getParams();
+    getId() {
+        const {match:{params}} = this.props;
 
-        if(!this.props.singleUser || !this.props.singleUser[params.userId] || !this.props.singleUser[params.userId].posts) {
-            // call api action
-            this.props.fetchSingleUserPosts(params.userId);
+        return params.userId;
+    }
+
+    componentDidMount() {        
+        let user = this.getUser();
+
+        if(!user || !user.posts) {
+            // call api action                        
+            this.props.fetchSingleUserPosts(this.getId());
         }                         
     }
 
     componentDidUpdate() {
-        let params = this.getParams();
-        if(!this.props.singleUser[params.userId].name) {
-            // call api action to get user and store user                        
-            this.props.fetchSingleUser(params.userId);
+        let user = this.getUser();
+        if(!user.name) {
+            // call api action to get user and store user                                       
+            this.props.fetchSingleUser(this.getId());
             
         } 
     }
 
-    render() {      
-        let userId = this.getParams().userId  
-        if(!this.props.singleUser[userId] || !this.props.singleUser[userId].name) {
-            return <div className="ui loading"></div>
+    renderPostsTable() {
+        let user = this.getUser();
+        let posts = user.posts
+        return (
+            <table className="ui celled table" >
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Read</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+                    {posts.map((post, index) => {
+                        return (
+                            <tr key={index} >
+                                <td>{index + 1}</td>
+                                <td>{post.title}</td>
+                                <td><button className="ui primary medium button"  >Read Post</button></td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+        )
+
+        
+    }
+
+    render() {          
+        let user = this.getUser()
+        if(!user || !user.name || !user.posts) {
+            return <div className="ui active centered loader"></div>
         } else {
             return (
-                <h2 className='ui header' > {this.props.singleUser[userId].name}'s Posts </h2>
+                <div className="user-posts" >
+                    <div className="header-container" >
+                        <button className="ui icon button back-button" onClick={() => {this.props.history.push('/')}} >
+                            <i className="angle left icon " ></i>
+                        </button>                        
+                        <h2 className='user-name' > {user.name}'s Posts </h2>
+                    </div>
+                    <div className="ui divider"></div>
+
+                    <div>
+                        {this.renderPostsTable()}
+                    </div>                    
+
+                </div>
+                
+                
             )
         }
         

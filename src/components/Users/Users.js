@@ -5,23 +5,54 @@ import {fetchAllUsers} from '../../actions';
 import {storeSingleUser} from '../../actions';
 
 class Users extends React.Component {
+    
+    state = {filterUsers : []}
 
-    componentDidMount() {        
-        this.props.fetchAllUsers();        
+    componentDidMount() {
+        this.props.fetchAllUsers();
     }
 
-    renderUserRow() {                
-        return this.props.users.map(user => {
-            return (<tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.company.name}</td>
-                <td><button className="ui primary medium button" onClick={()=>{
-                    this.props.storeSingleUser({name : user.name, id: user.id})
-                    this.props.history.push(`/user/${user.id}`)
+    componentDidUpdate(prevProps) {
+        if(prevProps.users !== this.props.users) {
+            this.setState({filterUsers : this.props.users.map(user => user)})
+        }        
+    }
 
-                }} >View Posts</button></td>
-                </tr>)
-        })        
+    filterUsersByName(evt) {        
+        this.setState({filterUsers : this.props.users.filter(user => {
+            return user['name'].includes(evt.target.value)
+        })})
+    }
+
+    filterUsersByCompany(evt) {
+        this.setState({filterUsers : this.props.users.filter(user => {
+            return user.company.name.includes(evt.target.value)
+        })})
+    }
+
+    renderUserRow() {       
+        if(this.state.filterUsers.length > 0) {
+            return this.state.filterUsers.map(user => {
+                return (<tr key={user.id}>
+                    <td>{user.name}</td>
+                    <td>{user.company.name}</td>
+                    <td><button className="ui primary medium button" onClick={()=>{
+                        this.props.storeSingleUser({name : user.name, id: user.id})
+                        this.props.history.push(`/user/${user.id}`)
+    
+                    }} >View Posts</button></td>
+                    </tr>)
+            })
+        } else {
+            return (
+                <tr>
+                    <td>No Users found.</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            )
+        }         
+                
     }
 
     renderUserTable() {
@@ -30,7 +61,7 @@ class Users extends React.Component {
         } else {
             return (
                 <div className="user-table" >
-                    <table className="ui celled table" >
+                    <table className="ui celled unstackable table" >
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -39,6 +70,19 @@ class Users extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>
+                                    <div className="ui input">
+                                        <input type="text" placeholder="Filter Name" onChange={(e) => {this.filterUsersByName(e)}}/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="ui input">
+                                        <input type="text" placeholder="Filter Company" onChange={(e) => {this.filterUsersByCompany(e)}}/>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
                             {this.renderUserRow()}
                         </tbody>
                     </table>
@@ -59,7 +103,9 @@ class Users extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return { users : state.users }
+    return { 
+        users : state.users,        
+    }
 }
 
 export default connect(mapStateToProps, {fetchAllUsers, storeSingleUser})(Users);

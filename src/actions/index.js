@@ -12,14 +12,14 @@ export const fetchAllUsers = () => async dispatch => {
 }
 
 export const fetchSingleUserPosts = (userId) => async dispatch => {
-    const response = await api.get(`/posts?userId=${1}&skip=0&limit=0`);
+    const response = await api.get(`/posts?userId=${userId}&skip=0&limit=0`);
     
     dispatch({type: FETCH_SINGLE_USER_POSTS, payload: {id : userId, data : response.data}})
 }
 
 export const fetchSingleUser = (userId) => async dispatch => {
     const response = await api.get(`users/${userId}`);
-    console.log(response.data);
+
     dispatch({type: STORE_SINGLE_USER, payload : {id: userId, name: response.data.name}});
 }
 

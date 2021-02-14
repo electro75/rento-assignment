@@ -3,8 +3,8 @@ import {FETCH_SINGLE_USER_POSTS, STORE_SINGLE_USER} from '../actions';
 
 export const singleUserReducer = (state = {}, action) => {
     switch(action.type) {
-        case FETCH_SINGLE_USER_POSTS :            
-            if(Object.keys(state).length < 10) {                   
+        case FETCH_SINGLE_USER_POSTS :
+            if(state[action.payload.id] || Object.keys(state).length < 10) {                   
                 return {
                     ...state,
                     [action.payload.id] : {
@@ -29,8 +29,8 @@ export const singleUserReducer = (state = {}, action) => {
                 }
             } 
 
-        case STORE_SINGLE_USER :            
-            if(state[action.payload.id] && !state[action.payload.id].id) {
+        case STORE_SINGLE_USER :                      
+            if(state[action.payload.id] && !state[action.payload.id].id) {                                                
                 return {
                     ...state,
                     [action.payload.id] : {
@@ -38,12 +38,15 @@ export const singleUserReducer = (state = {}, action) => {
                         ...action.payload
                     }
                 }
-            } else {
+            } else {                
                 return {
                     ...state,
-                    [action.payload.id] : action.payload
+                    [action.payload.id] : {
+                        ...state[action.payload.id],
+                        ...action.payload
+                    }
                 }
-            }
+            }            
 
         default : 
             return state;
