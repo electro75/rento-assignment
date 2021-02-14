@@ -42,7 +42,7 @@ class Users extends React.Component {
                     <td>{user.name}</td>
                     <td>{user.company.name}</td>
                     <td><button className="ui primary medium button" onClick={()=>{
-                        this.props.storeSingleUser({name : user.name, id: user.id})
+                        // this.props.storeSingleUser({name : user.name, id: user.id})
                         this.props.history.push(`/user/${user.id}`)
     
                     }} >View Posts</button></td>

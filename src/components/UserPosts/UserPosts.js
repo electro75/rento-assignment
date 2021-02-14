@@ -42,7 +42,7 @@ class UserPosts extends React.Component {
         
         
         if(prevProps.updateLocal !== this.props.updateLocal) {
-            let userId = this.getId();
+            let userId = this.getId();            
             this.setState({filterPosts : this.props.singleUser[userId].posts.map(post => post)})
         }
         
@@ -55,11 +55,11 @@ class UserPosts extends React.Component {
         })})
     }
 
-    // getNextPage() {
-    //     let userPosts = this.getUser().posts;
+    getNextPage() {
+        let userPosts = this.getUser().posts;
         
-    //     this.props.fetchSingleUserPosts(this.getId(), userPosts.length);
-    // }
+        this.props.fetchSingleUserPosts(this.getId(), userPosts.length);        
+    }
 
     renderPostsTable() {        
         return (

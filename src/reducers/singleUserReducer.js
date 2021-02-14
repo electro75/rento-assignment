@@ -4,13 +4,20 @@ import {DELETE_POST, FETCH_SINGLE_USER_POSTS, STORE_SINGLE_USER} from '../action
 export const singleUserReducer = (state = {}, action) => {
     switch(action.type) {
         case FETCH_SINGLE_USER_POSTS :
-            if(state[action.payload.id] || Object.keys(state).length < 10) {      
-                console.log(action.payload.data);             
+            if(state[action.payload.id] || Object.keys(state).length < 10) {
+                let posts = []
+                if(state[action.payload.id] && state[action.payload.id].posts) {
+                    
+                    posts = [...state[action.payload.id].posts, ...action.payload.data]                    
+                } else {
+                    posts = [...action.payload.data]
+                }                
+
                 return {
                     ...state,
                     [action.payload.id] : {
                         ...state[action.payload.id],
-                        posts : [...action.payload.data]
+                        posts
                     }
                 }
             } else {
@@ -25,7 +32,7 @@ export const singleUserReducer = (state = {}, action) => {
                     ...newState, 
                     [action.payload.id] : {
                         ...state[action.payload.id],
-                        posts: [...action.payload.data]
+                        posts: [...action.payload.data],                        
                     }
                 }
             } 
