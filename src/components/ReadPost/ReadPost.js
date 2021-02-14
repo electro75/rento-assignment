@@ -26,11 +26,11 @@ class ReadPost extends React.Component {
         }
     }
 
-    // componentDidUpdate() {
-    //     let post = this.getPost();
-    //     console.log('wrong call')
-    //     this.props.history.push(`/user/${post.userId}`);
-    // }    
+    componentDidUpdate() {
+        if(this.props.error) {
+            this.props.history.push('/404');
+        }
+    }    
 
     getComments() {
         let post= this.getPost();
@@ -65,8 +65,7 @@ class ReadPost extends React.Component {
     }
 
 
-    render() {        
-        console.log(this.props.singlePost[this.getId().postId]);
+    render() {                
         if(!this.props.singlePost[this.getId().postId]) {
             return <div className="ui active centered loader"></div>
         } else {
@@ -110,7 +109,8 @@ class ReadPost extends React.Component {
 
 const mapStateToProps = (state) => {
     return { 
-        singlePost : state.singlePost,        
+        singlePost : state.singlePost, 
+        error: state.error       
     }
 }
 

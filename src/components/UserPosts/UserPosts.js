@@ -34,17 +34,23 @@ class UserPosts extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        let user = this.getUser();        
-        if(!user.name) {
-            // call api action to get user and store user                                       
-            this.props.fetchSingleUser(this.getId());            
+        if(!this.props.error) {
+            let user = this.getUser();        
+            if(!user.name) {
+                // call api action to get user and store user                                       
+                this.props.fetchSingleUser(this.getId());            
+            }
+        
+        
+            if(prevProps.updateLocal !== this.props.updateLocal) {
+                let userId = this.getId();            
+                this.setState({filterPosts : this.props.singleUser[userId].posts.map(post => post)})
+            }
+        } else {
+            this.props.history.push('/404');            
         }
         
         
-        if(prevProps.updateLocal !== this.props.updateLocal) {
-            let userId = this.getId();            
-            this.setState({filterPosts : this.props.singleUser[userId].posts.map(post => post)})
-        }
         
     }
 
@@ -136,7 +142,8 @@ class UserPosts extends React.Component {
 const mapStateToProps = (state) => {
     return { 
         singleUser : state.singleUser, 
-        updateLocal : state.updateLocal
+        updateLocal : state.updateLocal,
+        error: state.error
     }
 }
 

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { singleUserReducer } from './singleUserReducer';
 import { singlePostReducer } from './singlePostReducer';
 import userReducer from './usersReducer';
-import {UPDATE_LOCAL} from '../actions';
+import {UPDATE_LOCAL, API_ERROR, ERROR_INIT} from '../actions';
 
 const updateLocal = (state = 1, action) => {
     switch(action.type) {
@@ -14,12 +14,26 @@ const updateLocal = (state = 1, action) => {
     }
 }
 
+const errorReducer = (state = false, action) => {
+    switch(action.type) {
+        case API_ERROR : 
+            return true
+        
+        case ERROR_INIT :
+            return false
+        default :
+            return state;
+
+    }
+}
+
 
 export default combineReducers({
     users : userReducer,            // [Users] ; contains all users
     singleUser : singleUserReducer, // {0: {User1}, 1: {User2}...} ; contains upto 10 user detail in a single object. specific users can be accesed using id
     singlePost : singlePostReducer, // {0: {PostDetails1}, 1: {PostDetails2}} ; contains upto 10 post detail in a single object. specific posts can be accesed using id
-    updateLocal
+    updateLocal,
+    error: errorReducer
 })
 
 // User and Post Details are stored in a single object in order to prevent multiple API calls and to make accessing of particular user/post details easier.
