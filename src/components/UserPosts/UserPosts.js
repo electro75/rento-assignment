@@ -34,11 +34,10 @@ class UserPosts extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        let user = this.getUser();
+        let user = this.getUser();        
         if(!user.name) {
             // call api action to get user and store user                                       
-            this.props.fetchSingleUser(this.getId());
-            
+            this.props.fetchSingleUser(this.getId());            
         }
         
         
@@ -91,6 +90,7 @@ class UserPosts extends React.Component {
                         <td>
                             <button className="ui primary medium button" > Load More Posts</button>
                         </td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -99,8 +99,8 @@ class UserPosts extends React.Component {
         
     }
 
-    render() {          
-        let user = this.getUser()
+    render() {
+        let user = this.getUser();        
         if(!user || !user.name || !user.posts) {
             return <div className="ui active centered loader"></div>
         } else {

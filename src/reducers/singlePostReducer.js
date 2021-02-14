@@ -1,4 +1,4 @@
-import {FETCH_POST_DETAILS, FETCH_POST_COMMENTS} from '../actions';
+import {FETCH_POST_DETAILS, FETCH_POST_COMMENTS, DELETE_POST} from '../actions';
 
 export const singlePostReducer = (state = {}, action) => {
     switch(action.type) {
@@ -30,7 +30,19 @@ export const singlePostReducer = (state = {}, action) => {
                     comments : [...action.payload.data]
                 }
             }
-
+            
+        case DELETE_POST : 
+            let newState= {}
+            
+            Object.keys(state).forEach(key => {                
+                if(+key !== action.payload.postId) {
+                    newState[key] = state[key];
+                }
+            })
+            
+            return {
+                ...newState
+            }
 
         default :
             return state;

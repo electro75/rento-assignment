@@ -6,6 +6,7 @@ export const STORE_SINGLE_USER = 'STORE_SINGLE_USER';
 export const UPDATE_LOCAL = 'UPDATE_LOCAL';
 export const FETCH_POST_DETAILS = 'FETCH_POST_DETAILS';
 export const FETCH_POST_COMMENTS = 'FETCH_POST_COMMENTS';
+export const DELETE_POST = 'DELETE_POST';
 
 // get all users
 export const fetchAllUsers = () => async dispatch => {
@@ -30,7 +31,6 @@ export const fetchSingleUserPosts = (userId) => async dispatch => {
 // get user details (name) in case user's post page is accessed directly
 export const fetchSingleUser = (userId) => async dispatch => {
     const response = await api.get(`/users/${userId}`);
-
     dispatch({type: STORE_SINGLE_USER, payload : {id: userId, name: response.data.name}});
 }
 
@@ -47,13 +47,18 @@ export const updateLocalState = () => {
 // fetch post details 
 export const fetchPostDetails = (postId) => async dispatch => {
     const response = await api.get(`posts/${postId}`);
-
     dispatch({type : FETCH_POST_DETAILS, payload: response.data});
 }
 
 // fetch post comments
 export const fetchPostComments = (postId) => async dispatch => {
     const response = await api.get(`comments`, {params : {postId}});
-    console.log(response);
     dispatch({type: FETCH_POST_COMMENTS, payload: {id: postId, data: response.data}});
+}
+
+//delete post
+export const deletePost = (post) => async dispatch => {
+    const response = await api.delete(`posts/${post.postId}`);    
+    dispatch({type: DELETE_POST, payload: post});
+    dispatch({type: UPDATE_LOCAL});
 }

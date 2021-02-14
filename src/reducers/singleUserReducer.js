@@ -1,4 +1,4 @@
-import {FETCH_SINGLE_USER_POSTS, STORE_SINGLE_USER} from '../actions';
+import {DELETE_POST, FETCH_SINGLE_USER_POSTS, STORE_SINGLE_USER} from '../actions';
 
 
 export const singleUserReducer = (state = {}, action) => {
@@ -46,7 +46,23 @@ export const singleUserReducer = (state = {}, action) => {
                         ...action.payload
                     }
                 }
-            }            
+            }
+            
+        case DELETE_POST : 
+            if(state[action.payload.userId]) {                
+                let newState = {
+                    ...state,
+                    [action.payload.userId] : {
+                        ...state[action.payload.userId],
+                        posts : state[action.payload.userId].posts.filter(post => {
+                            return post.id !== action.payload.postId
+                        })
+                    }
+                }
+                return newState
+            } else {
+                return state
+            }
 
         default : 
             return state;

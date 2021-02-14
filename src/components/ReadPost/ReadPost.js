@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {fetchPostDetails, fetchPostComments} from '../../actions';
+import {fetchPostDetails, fetchPostComments, deletePost} from '../../actions';
 import Comments from './Comments/Comments';
 import './ReadPost.css';
 
@@ -25,6 +25,12 @@ class ReadPost extends React.Component {
             this.props.fetchPostDetails(postId);
         }
     }
+
+    // componentDidUpdate() {
+    //     let post = this.getPost();
+    //     console.log('wrong call')
+    //     this.props.history.push(`/user/${post.userId}`);
+    // }    
 
     getComments() {
         let post= this.getPost();
@@ -53,8 +59,14 @@ class ReadPost extends React.Component {
         }
     }
 
+    handleDelete(post) {        
+        this.props.deletePost({postId : post.id, userId : post.userId});
+        this.props.history.push(`/user/${post.userId}`);
+    }
+
 
     render() {        
+        console.log(this.props.singlePost[this.getId().postId]);
         if(!this.props.singlePost[this.getId().postId]) {
             return <div className="ui active centered loader"></div>
         } else {
@@ -71,7 +83,7 @@ class ReadPost extends React.Component {
                             </h2>
                         </div>
                         <div className="del-btn" >
-                            <button className="ui negative icon button labeled" >
+                            <button className="ui negative icon button labeled" onClick={() => this.handleDelete(post)}>
                                 <i className="trash white icon"></i>
                                 Delete Post
                             </button>
@@ -102,4 +114,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {fetchPostDetails, fetchPostComments})(ReadPost);
+export default connect(mapStateToProps, {fetchPostDetails, fetchPostComments, deletePost})(ReadPost);
