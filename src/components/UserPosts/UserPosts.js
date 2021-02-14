@@ -2,8 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import './UserPosts.css';
 import {fetchSingleUserPosts, fetchSingleUser} from '../../actions';
+import {updateLocalState} from '../../actions';
 
 class UserPosts extends React.Component {
+
+    state = {filterPosts : []}
 
     getUser() {
         const {match : {params}} = this.props;
@@ -23,21 +26,39 @@ class UserPosts extends React.Component {
         if(!user || !user.posts) {
             // call api action                        
             this.props.fetchSingleUserPosts(this.getId());
-        }                         
+        } else {
+            this.props.updateLocalState()
+        }
+        
+        
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         let user = this.getUser();
         if(!user.name) {
             // call api action to get user and store user                                       
             this.props.fetchSingleUser(this.getId());
             
-        } 
+        }
+        
+        
+        if(prevProps.updateLocal !== this.props.updateLocal) {
+            let userId = this.getId();
+            this.setState({filterPosts : this.props.singleUser[userId].posts.map(post => post)})
+        }
+        
+    }
+
+    filterPostsByTitle(ev) {
+        let user = this.getUser();
+        this.setState({filterPosts : user.posts.filter(post => {
+            return post.title.includes(ev.target.value);
+        })})
     }
 
     renderPostsTable() {
-        let user = this.getUser();
-        let posts = user.posts
+        // let user = this.getUser();
+        // let posts = user.posts
         return (
             <table className="ui celled table" >
                 <thead>
@@ -48,7 +69,16 @@ class UserPosts extends React.Component {
                     </tr>                    
                 </thead>
                 <tbody>
-                    {posts.map((post, index) => {
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div className="ui input">
+                                <input type="text" placeholder="Filter Title" onChange={(e) => {this.filterPostsByTitle(e)}}/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {this.state.filterPosts.map((post, index) => {
                         return (
                             <tr key={index} >
                                 <td>{index + 1}</td>
@@ -93,7 +123,10 @@ class UserPosts extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return { singleUser : state.singleUser }
+    return { 
+        singleUser : state.singleUser,
+        updateLocal : state.updateLocal
+    }
 }
 
-export default connect(mapStateToProps, {fetchSingleUserPosts, fetchSingleUser})(UserPosts);
+export default connect(mapStateToProps, {fetchSingleUserPosts, fetchSingleUser, updateLocalState})(UserPosts);

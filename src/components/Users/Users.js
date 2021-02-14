@@ -3,17 +3,22 @@ import {connect} from 'react-redux';
 
 import {fetchAllUsers} from '../../actions';
 import {storeSingleUser} from '../../actions';
+import {updateLocalState} from '../../actions';
 
 class Users extends React.Component {
     
     state = {filterUsers : []}
 
     componentDidMount() {
-        this.props.fetchAllUsers();
+        if(this.props.users.length === 0) {
+            this.props.fetchAllUsers();
+        }
+        
+        this.props.updateLocalState()
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.users !== this.props.users) {
+        if(prevProps.updateLocal !== this.props.updateLocal) {
             this.setState({filterUsers : this.props.users.map(user => user)})
         }        
     }
@@ -104,8 +109,9 @@ class Users extends React.Component {
 
 const mapStateToProps = (state) => {
     return { 
-        users : state.users,        
+        users : state.users,
+        updateLocal: state.updateLocal        
     }
 }
 
-export default connect(mapStateToProps, {fetchAllUsers, storeSingleUser})(Users);
+export default connect(mapStateToProps, {fetchAllUsers, storeSingleUser, updateLocalState})(Users);
