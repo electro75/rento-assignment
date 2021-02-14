@@ -23,3 +23,14 @@ body {
 }
 
 
+@media screen and (max-width: 1000px) {
+  html {
+    font-size: 62.5%;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  html {
+    font-size: 50%;
+  }
+}

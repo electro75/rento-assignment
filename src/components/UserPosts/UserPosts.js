@@ -25,7 +25,7 @@ class UserPosts extends React.Component {
 
         if(!user || !user.posts) {
             // call api action                        
-            this.props.fetchSingleUserPosts(this.getId());
+            this.props.fetchSingleUserPosts(this.getId(), 0);
         } else {
             this.props.updateLocalState()
         }
@@ -55,9 +55,15 @@ class UserPosts extends React.Component {
         })})
     }
 
+    // getNextPage() {
+    //     let userPosts = this.getUser().posts;
+        
+    //     this.props.fetchSingleUserPosts(this.getId(), userPosts.length);
+    // }
+
     renderPostsTable() {        
         return (
-            <table className="ui celled table" >
+            <table className="ui celled unstackable table" >
                 <thead>
                     <tr>
                         <th>#</th>
@@ -88,7 +94,7 @@ class UserPosts extends React.Component {
                     <tr>
                         <td></td>
                         <td>
-                            <button className="ui primary medium button" > Load More Posts</button>
+                            <button className="ui primary medium button" onClick={() => this.getNextPage()} > Load More Posts</button>
                         </td>
                         <td></td>
                     </tr>
@@ -99,7 +105,7 @@ class UserPosts extends React.Component {
         
     }
 
-    render() {
+    render() {        
         let user = this.getUser();        
         if(!user || !user.name || !user.posts) {
             return <div className="ui active centered loader"></div>

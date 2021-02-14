@@ -17,21 +17,22 @@ export const fetchAllUsers = () => async dispatch => {
 }
 
 // get all post by one user
-export const fetchSingleUserPosts = (userId) => async dispatch => {
+export const fetchSingleUserPosts = (userId, skip) => async dispatch => {
     const response = await api.get(`/posts`, {params : {
         userId,
-        skip: 0,
+        skip,
         limit: 10
     }});    
     
     dispatch({type: FETCH_SINGLE_USER_POSTS, payload: {id : userId, data : response.data}})
-    dispatch({type: UPDATE_LOCAL});
+    
 }
 
 // get user details (name) in case user's post page is accessed directly
 export const fetchSingleUser = (userId) => async dispatch => {
     const response = await api.get(`/users/${userId}`);
     dispatch({type: STORE_SINGLE_USER, payload : {id: userId, name: response.data.name}});
+    dispatch({type: UPDATE_LOCAL});
 }
 
 // store the details of the user (name, id)
