@@ -1,0 +1,25 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    /* width: 100vw; */
+    /* align-items: center; */
+    justify-content: space-between;
+}
+
+.post-title {
+    margin-top: 0px;
+    margin-left: 2rem;
+}
+
+.del-btn {
+    position: relative;
+    right: 0rem;
+}
+
+.post-body {
+    font-size: 1.8rem;
+}
+
+.comments-section {
+    margin-top: 2rem;
+}

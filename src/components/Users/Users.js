@@ -62,7 +62,7 @@ class Users extends React.Component {
 
     renderUserTable() {
         if(this.props.users.length === 0 ) {
-            return <div>Fetching</div>
+            return <div className="ui active centered loader"></div>
         } else {
             return (
                 <div className="user-table" >

@@ -56,9 +56,7 @@ class UserPosts extends React.Component {
         })})
     }
 
-    renderPostsTable() {
-        // let user = this.getUser();
-        // let posts = user.posts
+    renderPostsTable() {        
         return (
             <table className="ui celled table" >
                 <thead>
@@ -83,10 +81,17 @@ class UserPosts extends React.Component {
                             <tr key={index} >
                                 <td>{index + 1}</td>
                                 <td>{post.title}</td>
-                                <td><button className="ui primary medium button"  >Read Post</button></td>
+                                <td><button className="ui primary medium button" onClick={()=>this.props.history.push(`/post/${post.id}`)} >Read Post</button></td>
                             </tr>
                         )
                     })}
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button className="ui primary medium button" > Load More Posts</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         )
@@ -101,7 +106,7 @@ class UserPosts extends React.Component {
         } else {
             return (
                 <div className="user-posts" >
-                    <div className="header-container" >
+                    <div className="user-header-container" >
                         <button className="ui icon button back-button" onClick={() => {this.props.history.push('/')}} >
                             <i className="angle left icon " ></i>
                         </button>                        
@@ -124,7 +129,7 @@ class UserPosts extends React.Component {
 
 const mapStateToProps = (state) => {
     return { 
-        singleUser : state.singleUser,
+        singleUser : state.singleUser, 
         updateLocal : state.updateLocal
     }
 }
